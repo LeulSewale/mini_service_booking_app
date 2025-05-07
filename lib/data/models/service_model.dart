@@ -43,4 +43,25 @@ class ServiceModel {
       "rating": rating,
     };
   }
+
+  ServiceModel copyWith({
+    String? name,
+    String? category,
+    double? price,
+    String? imageUrl,
+    bool? availability,
+    int? duration,
+    double? rating,
+  }) {
+    return ServiceModel(
+      id: id,
+      name: name ?? this.name,
+      category: category ?? this.category,
+      price: price ?? this.price,
+      imageUrl: imageUrl ?? this.imageUrl,
+      availability: availability ?? this.availability,
+      duration: duration ?? this.duration,
+      rating: rating ?? this.rating,
+    );
+  }
 }

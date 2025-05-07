@@ -1,4 +1,4 @@
-# mini_service_booking_app
+# mini_service_booking_apps
 
 A new Flutter project.
 
