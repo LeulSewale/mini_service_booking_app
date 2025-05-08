@@ -13,5 +13,6 @@ void main() async {
     title: 'Mini Service Booking App',
     initialRoute: AppRoutes.login,
     getPages: AppPages.routes,
+    debugShowCheckedModeBanner: false,
   ));
 }

@@ -1,104 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../data/models/service_model.dart';
 import '../controllers/service_controller.dart';
 
-class AddServicePage extends StatefulWidget {
-  @override
-  _AddServicePageState createState() => _AddServicePageState();
-}
+class AddServicePage extends StatelessWidget {
+  final ServiceController controller = Get.find();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController imageUrlController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController ratingController = TextEditingController();
+  final TextEditingController durationController = TextEditingController();
+  final TextEditingController availabilityController = TextEditingController();
 
-class _AddServicePageState extends State<AddServicePage> {
-  final _formKey = GlobalKey<FormState>();
-  final _controller = Get.find<ServiceController>();
+  AddServicePage({Key? key}) : super(key: key);
 
-  // Controllers for form fields
-  final nameController = TextEditingController();
-  final categoryController = TextEditingController();
-  final priceController = TextEditingController();
-  final imageUrlController = TextEditingController();
-  final durationController = TextEditingController();
-  final ratingController = TextEditingController();
-  bool availability = true;
+  void _addService() {
+    final name = nameController.text.trim();
+    final category = categoryController.text.trim();
+    final imageUrl = imageUrlController.text.trim();
+    final price = double.tryParse(priceController.text.trim()) ?? 0.0;
+    final rating = double.tryParse(ratingController.text.trim()) ?? 0.0;
+    final duration = durationController.text.trim();
+    final availability =
+        availabilityController.text.trim().toLowerCase() == 'true';
 
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      final newService = ServiceModel(
-        id: '', // backend will generate
-        name: nameController.text,
-        category: categoryController.text,
-        price: double.parse(priceController.text),
-        imageUrl: imageUrlController.text,
-        availability: availability,
-        duration: int.parse(durationController.text),
-        rating: double.parse(ratingController.text),
-      );
-      _controller.addService(newService).then((_) {
-        Get.back(); // Return to HomePage
-      });
-    }
+    controller.addService(
+        name, category, imageUrl, price, rating, duration, availability);
+    Get.back(); // optional: go back after adding
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller,
+      {TextInputType keyboardType = TextInputType.text}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: Colors.grey.shade100,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Service')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Obx(() {
-          return Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                _buildTextField(nameController, 'Name'),
-                _buildTextField(categoryController, 'Category'),
-                _buildTextField(priceController, 'Price', isNumber: true),
-                _buildTextField(imageUrlController, 'Image URL'),
-                _buildTextField(durationController, 'Duration (min)', isNumber: true),
-                _buildTextField(ratingController, 'Rating (0.0 - 5.0)', isNumber: true),
-                SwitchListTile(
-                  value: availability,
-                  title: const Text('Available'),
-                  onChanged: (val) {
-                    setState(() {
-                      availability = val;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _controller.isLoading.value ? null : _submit,
-                  child: _controller.isLoading.value
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Add Service'),
-                ),
-              ],
-            ),
-          );
-        }),
+      appBar: AppBar(
+        title: const Text('Add New Service'),
+        centerTitle: true,
       ),
-    );
-  }
-
-  Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTextField('Service Name', nameController),
+              _buildTextField('Category', categoryController),
+              _buildTextField('Image URL', imageUrlController),
+              _buildTextField('Price', priceController,
+                  keyboardType: TextInputType.number),
+              _buildTextField('Rating', ratingController,
+                  keyboardType: TextInputType.number),
+              _buildTextField('Duration', durationController),
+              _buildTextField(
+                  'Availability (true/false)', availabilityController),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _addService,
+                icon: const Icon(Icons.add),
+                label: const Text('Add Service'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ],
+          ),
         ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return '$label is required';
-          }
-          if (isNumber && double.tryParse(value) == null) {
-            return '$label must be a number';
-          }
-          return null;
-        },
       ),
     );
   }

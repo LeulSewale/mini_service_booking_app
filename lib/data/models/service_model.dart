@@ -2,66 +2,46 @@ class ServiceModel {
   final String id;
   final String name;
   final String category;
-  final double price;
   final String imageUrl;
-  final bool availability;
-  final int duration;
+  final double price;
   final double rating;
+  final String duration;
+  final bool availability;
 
   ServiceModel({
     required this.id,
     required this.name,
     required this.category,
-    required this.price,
     required this.imageUrl,
-    required this.availability,
-    required this.duration,
+    required this.price,
     required this.rating,
+    required this.duration,
+    required this.availability,
   });
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
     return ServiceModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      category: json['category'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
-      imageUrl: json['imageUrl'] ?? '',
-      availability: json['availability'] ?? false,
-      duration: json['duration'] ?? 0,
-      rating: (json['rating'] ?? 0).toDouble(),
+      id: json['id'],
+      name: json['name'],
+      category: json['category'],
+      imageUrl: json['imageUrl'],
+      price: json['price'].toDouble(),
+      rating: json['rating'].toDouble(),
+      duration: json['duration'],
+      availability: json['availability'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "name": name,
-      "category": category,
-      "price": price,
-      "imageUrl": imageUrl,
-      "availability": availability,
-      "duration": duration,
-      "rating": rating,
+      'id': id,
+      'name': name,
+      'category': category,
+      'imageUrl': imageUrl,
+      'price': price,
+      'rating': rating,
+      'duration': duration,
+      'availability': availability,
     };
-  }
-
-  ServiceModel copyWith({
-    String? name,
-    String? category,
-    double? price,
-    String? imageUrl,
-    bool? availability,
-    int? duration,
-    double? rating,
-  }) {
-    return ServiceModel(
-      id: id,
-      name: name ?? this.name,
-      category: category ?? this.category,
-      price: price ?? this.price,
-      imageUrl: imageUrl ?? this.imageUrl,
-      availability: availability ?? this.availability,
-      duration: duration ?? this.duration,
-      rating: rating ?? this.rating,
-    );
   }
 }

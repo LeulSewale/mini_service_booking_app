@@ -15,21 +15,22 @@ class AppPages {
       page: () => HomePage(),
       binding: ServiceBinding(),
     ),
-    GetPage(
-      name: AppRoutes.addService,
-      page: () => AddServicePage(),
-      binding: ServiceBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.serviceDetail,
-      page: () => ServiceDetailPage(),
-      binding: ServiceBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.editService,
-      page: () => EditServicePage(),
-      binding: ServiceBinding(),
-    ),
+     GetPage(name: AppRoutes.addService, page: () => AddServicePage()),
+    // GetPage(
+    //   name: AppRoutes.addService,
+    //   page: () => AddServicePage(),
+    //   binding: ServiceBinding(),
+    // ),
+    // // GetPage(
+    //   name: AppRoutes.serviceDetail,
+    //   page: () => ServiceDetailPage(),
+    //   binding: ServiceBinding(),
+    // ),
+    // GetPage(
+    //   name: AppRoutes.editService,
+    //   page: () => EditServicePage(),
+    //   binding: ServiceBinding(),
+    // ),
     GetPage(
       name: AppRoutes.login,
       page: () => LoginPage(),
